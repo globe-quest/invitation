@@ -8,13 +8,17 @@ var $=function(s,r){return (r||document).querySelector(s)};
 
 /* ---- theme ---- */
 function lum(h){var n=parseInt(h.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return (0.299*r+0.587*g+0.114*b)/255}
-var st=document.documentElement.style, fonts={Shrikhand:'"Shrikhand"',Marcellus:'"Marcellus"',Pinyon:'"Pinyon"'};
+var st=document.documentElement.style, fonts={Shrikhand:'"Shrikhand"',Marcellus:'"Marcellus"',Pinyon:'"Pinyon"',Rozha:'"Rozha"',GreatVibes:'"GreatVibes"',CinzelDec:'"CinzelDec"',AlexBrush:'"AlexBrush"'};
 var jali="url(\"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g fill="none" stroke="#000" stroke-width="2.2"><rect x="18" y="18" width="28" height="28"/><rect x="18" y="18" width="28" height="28" transform="rotate(45 32 32)"/><circle cx="32" cy="32" r="6"/><path d="M0 0l12 12M64 0L52 12M0 64l12-12M64 64L52 52"/></g></svg>')+"\")";
 var vars={bg:T.bg,paper:T.paper,ink:T.ink,mute:T.mute,a1:T.a1,a2:T.a2,a3:T.a3,d1:T.door[0],d2:T.door[1],di:T.doorInk,c1:T.cur[0],c2:T.cur[1],
   fd:fonts[T.display],fn:fonts[T.names],ns:T.nameSize,on:lum(T.a1)>0.6?"#1c1408":"#ffffff",jali:jali};
 for(var k in vars)st.setProperty("--"+k,vars[k]);
 var mc=document.querySelector('meta[name=theme-color]');if(mc)mc.content=T.door[0];
 st.setProperty("--hk",T.dark?T.bg:T.ink);st.setProperty("--hd",T.dark?T.paper:T.a1);if(!T.dark)document.documentElement.classList.add("lite");
+if(T.display==="Rozha")document.documentElement.classList.add("rz");
+if(T.night)document.documentElement.classList.add("nt");
+if(T.paperArt)document.documentElement.classList.add("pp");
+if(T.qawwaliArt)document.documentElement.classList.add("qw","rz");
 ["velvet","drape","swag"].forEach(function(c){if(T[c])document.documentElement.classList.add(c)});
 st.setProperty("--heart","url(\"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 96"><path d="M50 92C20 68 4 49 4 30C4 15 16 6 28 6C38 6 46 12 50 21C54 12 62 6 72 6C84 6 96 15 96 30C96 49 80 68 50 92Z"/></svg>')+"\")");
 
@@ -69,6 +73,11 @@ function swagSVG(){
   return '<svg class="val sw" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true">'+half(false)+half(true)+'<circle cx="200" cy="6" r="9" fill="'+T.cur[1]+'"/><circle cx="200" cy="6" r="5" fill="#FFF8DC"/></svg>'}
 
 /* ---- page ---- */
+var heroUrl=T.heroImg?"../assets/"+T.heroImg:"";
+var photoUrl=E.photo?"../assets/"+E.photo.src:"";
+var dressUrl=E.dressPhoto?"../assets/"+E.dressPhoto:"";
+var leadP=function(t){return /[A-Za-z]/.test(t)?'<p class="lead">'+rich(t)+'</p>':'<p class="lead urd" lang="ur" dir="rtl">'+esc(t)+'</p>'};
+var rich=function(t){return esc(t).replace(/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF][\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF\s\u200C]*[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]|[\u0600-\u06FF]/g,function(m){return '<bdi class="uw" lang="ur" dir="rtl">'+m+'</bdi>'})};
 var SIG=E.signatureUrdu||W.signatureUrdu||"";
 var mapQ=encodeURIComponent(V.mapQuery||V.address), orn='<div class="orn" aria-hidden="true"><i></i></div>';
 document.title=E.title+" | "+g1+" & "+b1;
@@ -76,19 +85,20 @@ var cimg=T.coverImg?"background-image:linear-gradient(180deg,#0008 0,#0000 22%,#
 $("#app").innerHTML=
  (T.coverImg?
    '<div id="cover" class="photo" role="button" tabindex="0" aria-label="Open the invitation"><div class="door l"><i style="'+cimg+'"></i></div><div class="door r"><i style="'+cimg+'"></i></div>'+
-     '<div class="ctop"><div class="who">'+esc(g1)+' &amp; '+esc(b1)+'</div></div>'+
-     (T.seal==="plaque"?'<div class="seal pl">'+plaqueSVG()+'</div>':'<div class="seal u"><span class="ur gold" lang="ur">'+esc(E.sealUrdu||E.urdu)+'</span><small>'+esc(g1[0])+' &amp; '+esc(b1[0])+'</small></div>')+
-     '<div class="cbot"><div class="ev">'+esc(E.title)+'</div>'+(T.seal==="plaque"?'':'<span class="tap">Tap to open</span>')+'</div></div>'
+     (E.coverNames===false?'':'<div class="ctop"><div class="who">'+esc(g1)+' &amp; '+esc(b1)+'</div></div>')+
+     (T.seal==="plaque"?'<div class="seal pl">'+plaqueSVG()+'</div>':'<div class="seal u"><span class="ur gold" lang="ur">'+esc(E.sealUrdu||E.urdu)+'</span>'+(E.coverNames===false?'':'<small>'+esc(g1[0])+' &amp; '+esc(b1[0])+'</small>')+'</div>')+
+     '<div class="cbot">'+(E.coverTitle===false?'':'<div class="ev">'+esc(E.title)+'</div>')+(T.seal==="plaque"?'':'<span class="tap">Tap to open</span>')+'</div></div>'
   :
    '<div id="cover" role="button" tabindex="0" aria-label="Open the invitation"><div class="door l"></div><div class="door r"></div>'+
      '<div class="ctop"><div class="ur" lang="ur">'+esc(E.urdu)+'</div><div class="who">'+esc(g1)+' &amp; '+esc(b1)+'</div></div>'+
      '<div class="seal">'+sealSVG()+'<div class="mono">'+esc(g1[0])+'<i>&amp;</i>'+esc(b1[0])+'</div></div>'+
      '<div class="cbot"><div class="ev">'+esc(E.title)+'</div><span class="tap">Tap to open</span></div></div>')+
- '<header class="hero'+(T.deco==="arches"?" arch":"")+'">'+hangHTML()+decoHTML()+'<div class="cur l"></div><div class="cur r"></div>'+(T.swag?swagSVG():'<div class="val"></div>')+
-   '<div class="in"><div class="kick">Together with their families</div><h1 class="evt">'+esc(E.title)+'</h1><div class="ur'+(T.velvet?" gold":"")+'" lang="ur">'+esc(E.urdu)+'</div>'+orn+
-   '<p class="nm"><span>'+esc(W.groom)+'</span></p><div class="amp">&amp;</div><p class="nm"><span>'+esc(W.bride)+'</span></p>'+
-   '<div class="dline">'+dp[2]+" "+MON[dp[1]-1]+" "+dp[0]+'</div></div><div class="cue">Scroll</div></header>'+
- '<section class="s rv"><p class="lead">'+esc(E.invite)+'</p>'+orn+'</section>'+
+ '<header class="hero'+(T.deco==="arches"?" arch":"")+(T.heroImg?" art":"")+'"'+(T.heroImg?' style="--heroimg:url('+heroUrl+')"':'')+'>'+hangHTML()+decoHTML()+(T.curtain?'<svg class="vc" id="vc" aria-hidden="true"></svg>':'<div class="cur l"></div><div class="cur r"></div>'+(T.swag?swagSVG():'<div class="val"></div>'))+
+   '<div class="in"><div class="kick">Together with their families</div><h1 class="evt">'+esc(E.title)+'</h1><div class="ur'+(T.velvet||T.goldUrdu?" gold":"")+'" lang="ur">'+esc(E.urdu)+'</div>'+orn+
+   '<p class="nm"><span>'+esc(W.groom)+'</span></p>'+(E.heroNames==="groom"?'':'<div class="amp">&amp;</div><p class="nm"><span>'+esc(W.bride)+'</span></p>')+
+   (E.heroDate===false?'':'<div class="dline">'+dp[2]+" "+MON[dp[1]-1]+" "+dp[0]+'</div>')+'</div><div class="cue">Scroll</div></header>'+
+ '<section class="s rv">'+leadP(E.invite)+''+orn+'</section>'+
+ (E.photo?'<section class="s rv ph"><figure class="arch"><div class="fr"><img src="'+photoUrl+'" alt="'+esc(E.photo.caption||"")+'" loading="lazy"></div>'+(E.photo.caption?'<figcaption>'+esc(E.photo.caption)+'</figcaption>':'')+'</figure></section>':'')+
  '<section class="s rv" id="date"><h2>Scratch to reveal</h2><p class="sub">Rub the '+(T.scratch==="heart"?"heart":"circle")+' to see the date.</p>'+
    '<div class="scr'+(T.scratch==="heart"?" heart":"")+'" id="scr"><div class="under"><span class="m">'+MON[dp[1]-1]+'</span><span class="d">'+dp[2]+'</span><span class="m">'+wd+' '+dp[0]+'</span><span class="t">'+t12+'</span></div><canvas aria-label="Scratch area"></canvas></div>'+
    '<button class="link" id="skip">or tap here to reveal</button>'+
@@ -96,7 +106,7 @@ $("#app").innerHTML=
  '<section class="s rv"><h2>Counting down</h2><div class="cd" id="cd"></div></section>'+
  '<section class="s rv"><h2>Date and time</h2><div class="when">'+longDate+'</div><div class="sub">'+t12+' onwards</div>'+
    (E.program&&E.program.length?'<ol class="tl">'+E.program.map(function(p){return '<li><b>'+esc(p[0])+'</b><span>'+esc(p[1])+'</span></li>'}).join("")+'</ol>':"")+'</section>'+
- '<section class="s rv"><h2>Dress code</h2><div class="when">'+esc(E.themeName)+'</div><div class="sw" aria-hidden="true">'+T.swatch.map(function(c){return '<i style="background:'+c+'"></i>'}).join("")+'</div><p class="lead">'+esc(E.dress)+'</p></section>'+
+ '<section class="s rv'+(E.dressPhoto?' dp" style="--dp:url('+dressUrl+')':'')+'"><h2>Dress code</h2><div class="when'+(/[A-Za-z]/.test(E.themeName)?'':' urd" lang="ur" dir="rtl')+'">'+esc(E.themeName)+'</div><div class="sw" aria-hidden="true">'+T.swatch.map(function(c){return '<i style="background:'+c+'"></i>'}).join("")+'</div>'+leadP(E.dress)+'</section>'+
  '<section class="s rv" id="venue"><h2>Venue</h2><div class="when">'+esc(V.name)+'</div><div class="sub">'+esc(V.address)+'</div>'+
    '<div class="map"><a class="fb" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+mapQ+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5A7 7 0 005 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></svg><span>'+esc(V.name)+'</span><span>Tap to open the map</span></a>'+
    '<iframe id="mapf" title="Map of the venue" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q='+mapQ+'&z=15&output=embed"></iframe></div>'+
@@ -107,7 +117,7 @@ $("#app").innerHTML=
    '<div id="gw"><label>Number of guests</label><div class="step"><button type="button" data-s="-1" aria-label="Fewer guests">&minus;</button><output id="gn">1</output><button type="button" data-s="1" aria-label="More guests">+</button></div></div>'+
    '<label for="rm">Message (optional)</label><textarea id="rm"></textarea><div class="err" id="err" role="alert"></div>'+
    '<button class="btn" type="submit">Send RSVP on WhatsApp</button></form></section>'+
- '<footer class="rv">'+orn+'<div class="nm'+(SIG?' ur gold" lang="ur':'')+'">'+(SIG?esc(SIG):esc(g1)+' &amp; '+esc(b1))+'</div><p>We look forward to celebrating with you.</p></footer>'+
+ '<footer class="rv">'+orn+'<div class="nm'+(SIG?' ur gold" lang="ur':'')+'">'+(SIG?esc(SIG):esc(g1)+' &amp; '+esc(b1))+'</div><p>Looking forward to celebrating with you.</p></footer>'+
  '<nav class="pill" aria-label="Sections"><a href="#date">Date</a><a href="#venue">Venue</a><a href="#rsvp">RSVP</a></nav>'+
  (E.music?'<button class="snd" id="snd" aria-label="Turn music off" aria-pressed="true"><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9.2a4 4 0 010 5.6M18 6.8a7.4 7.4 0 010 10.4"/></svg><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>':"")+
  '<canvas id="fx" aria-hidden="true"></canvas>';
@@ -118,10 +128,55 @@ fit();addEventListener("resize",fit);if(document.fonts&&document.fonts.ready)doc
 
 var mf=$("#mapf");if(mf)mf.addEventListener("load",function(){mf.classList.add("ok")});
 
+/* ---- flowing velvet curtains (drawn in SVG, folds gather to tie-backs as they open) ---- */
+var VC=$("#vc"),cOpen=0,cT0=0,cSway=0;
+function drawCurtains(){
+  if(!VC)return;var C=T.curtain,Wd=VC.clientWidth||innerWidth,Hd=VC.clientHeight||innerHeight,half=Wd/2+2,n=10,steps=34,now=performance.now()/1000;
+  var e=cOpen<.5?4*cOpen*cOpen*cOpen:1-Math.pow(-2*cOpen+2,3)/2;
+  var TIE=.6,sway=cSway*Math.sin(now*1.3);
+  function prof(y){var u=y/Hd,o;
+    if(u<TIE){var k=u/TIE;o=.34+(.115-.34)*(k*k*(3-2*k))}else{var k2=(u-TIE)/(1-TIE);o=.115+(.27-.115)*Math.sqrt(k2)}
+    return 1+(o-1)*e}
+  function bx(i,y){var sc=prof(y),base=i/n*half*sc,u=y/Hd,amp=(1-e*.55)*(4+3*Math.sin(i*1.7)),wave=Math.sin(u*6.3+i*1.9+now*.9*(cSway?1:0))*amp*(i===0?0:1);
+    var flare=(y>Hd*TIE?(y-Hd*TIE)/(Hd*(1-TIE)):0)*e*10*(i/n);return base+wave+flare+sway*(y/Hd)*(i/n)}
+  var top=Hd*.115,pt=C.fillTop?0:top,defs='<defs><linearGradient id="vf" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="'+C.dark+'"/><stop offset=".22" stop-color="'+C.base+'"/><stop offset=".5" stop-color="'+C.light+'"/><stop offset=".72" stop-color="'+C.mid+'"/><stop offset="1" stop-color="'+C.dark+'"/></linearGradient>'+
+    '<linearGradient id="vs" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".25" stop-color="#000" stop-opacity="0"/><stop offset=".8" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>'+
+    '<linearGradient id="vp" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="'+C.dark+'"/><stop offset=".45" stop-color="'+C.mid+'"/><stop offset=".8" stop-color="'+C.light+'"/><stop offset="1" stop-color="'+C.base+'"/></linearGradient>'+
+    '<radialGradient id="tq" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#FFF6CC"/><stop offset=".5" stop-color="#E3B23C"/><stop offset="1" stop-color="#8A6210"/></radialGradient></defs>';
+  function panel(flip){var g="";
+    for(var i=0;i<n;i++){var L="",R="";
+      for(var j=0;j<=steps;j++){var y=pt+(Hd-pt)*j/steps;L+=(j?"L":"M")+bx(i,y).toFixed(1)+" "+y.toFixed(1)}
+      for(var j2=steps;j2>=0;j2--){var y2=pt+(Hd-pt)*j2/steps;R+="L"+(bx(i+1,y2)+.6).toFixed(1)+" "+y2.toFixed(1)}
+      g+='<path d="'+L+R+'Z" fill="url(#vf)"/>'}
+    var hem="";for(var k=0;k<=n;k++)hem+=(k?"L":"M")+bx(k,Hd).toFixed(1)+" "+(Hd-1).toFixed(1);
+    g+='<path d="'+hem+'" stroke="'+C.trim+'" stroke-width="3" fill="none" opacity=".75"/>';
+    var tx=bx(n,Hd*TIE),ty=Hd*TIE;
+    g+='<g class="tie" style="opacity:'+Math.max(0,(e-.86)/.14).toFixed(2)+'"><path d="M-4 '+(ty-6)+'Q'+(tx*.55)+' '+(ty+9)+' '+(tx+4)+' '+(ty-2)+'" stroke="#B8862A" stroke-width="5" fill="none" stroke-linecap="round"/>'+
+       '<path d="M-4 '+(ty-6)+'Q'+(tx*.55)+' '+(ty+9)+' '+(tx+4)+' '+(ty-2)+'" stroke="#FFE7A0" stroke-width="1.6" fill="none" stroke-dasharray="3 4"/>'+
+       '<circle cx="'+(tx+5)+'" cy="'+(ty-1)+'" r="7" fill="url(#tq)"/><path d="M'+(tx+1)+' '+(ty+5)+'L'+(tx-3)+' '+(ty+38)+'H'+(tx+13)+'L'+(tx+9)+' '+(ty+5)+'Z" fill="url(#tq)"/>'+
+       '<path d="M'+(tx-2)+' '+(ty+38)+'V'+(ty+46)+'M'+(tx+2)+' '+(ty+38)+'V'+(ty+47)+'M'+(tx+6)+' '+(ty+38)+'V'+(ty+47)+'M'+(tx+10)+' '+(ty+38)+'V'+(ty+46)+'" stroke="#C99A3C" stroke-width="1.4"/></g>';
+    return '<g'+(flip?' transform="translate('+Wd+' 0) scale(-1 1)"':'')+'>'+g+'<rect x="0" y="'+pt+'" width="'+(half*prof(Hd*.5)+20)+'" height="'+(Hd-pt)+'" fill="url(#vs)"/></g>'}
+  var sw="",cnt=3,ww=Wd/cnt,dep=Hd*.06,py=top*(C.fillTop?.62:.42);
+  for(var q=0;q<cnt;q++){var x0=q*ww,x1=x0+ww,xm=x0+ww/2;
+    sw+='<path d="M'+(x0-2)+' 0H'+(x1+2)+'V'+py+'Q'+xm+' '+(py+dep*2.1)+' '+(x0-2)+' '+py+'Z" fill="url(#vp)"/>';
+    for(var f=1;f<4;f++)sw+='<path d="M'+(x0+4)+' '+(py-f*6)+'Q'+xm+' '+(py+dep*2.1-f*11)+' '+(x1-4)+' '+(py-f*6)+'" stroke="'+C.dark+'" stroke-opacity=".35" stroke-width="2" fill="none"/>';
+    sw+='<path d="M'+(x0-2)+' '+py+'Q'+xm+' '+(py+dep*2.1)+' '+(x1+2)+' '+py+'" stroke="#C99A3C" stroke-width="3" fill="none"/>'+
+        '<path d="M'+(x0-2)+' '+(py+3)+'Q'+xm+' '+(py+dep*2.1+3)+' '+(x1+2)+' '+(py+3)+'" stroke="#FFF1B0" stroke-width="1.2" stroke-dasharray="1 4" fill="none"/>';
+    if(q)sw+='<circle cx="'+x0+'" cy="'+py+'" r="7" fill="url(#tq)"/><path d="M'+(x0-4)+' '+(py+5)+'L'+(x0-7)+' '+(py+34)+'H'+(x0+7)+'L'+(x0+4)+' '+(py+5)+'Z" fill="url(#tq)"/>'}
+  sw='<g style="filter:drop-shadow(0 4px 5px rgba(60,35,0,.35))"><rect x="0" y="0" width="'+Wd+'" height="'+py+'" fill="url(#vp)"/>'+sw+'<rect x="0" y="0" width="'+Wd+'" height="5" fill="#8A6210"/></g>';
+  VC.setAttribute("viewBox","0 0 "+Wd+" "+Hd);
+  VC.innerHTML=defs+'<g style="filter:drop-shadow(0 6px 10px rgba(60,35,0,.35))">'+panel(false)+panel(true)+'</g>'+(C.noPelmet?'':sw);
+}
+function openCurtains(){if(!VC)return;if(reduce){cOpen=1;drawCurtains();return}
+  setTimeout(function(){cT0=performance.now();(function step(t){cOpen=Math.max(0,Math.min(1,(t-cT0)/2600));drawCurtains();if(cOpen<1)requestAnimationFrame(step);else{cSway=1.5;idle()}})(cT0)},450)}
+var lastSway=0;function idle(){if(document.hidden){setTimeout(idle,800);return}var r=VC.getBoundingClientRect();
+  if(r.bottom>0){var t=performance.now();if(t-lastSway>66){lastSway=t;drawCurtains()}}requestAnimationFrame(idle)}
+if(VC){drawCurtains();addEventListener("resize",drawCurtains)}
+
 /* ---- open the card ---- */
 var cover=$("#cover");document.body.classList.add("locked");
 function openCard(){if(cover.classList.contains("open"))return;cover.classList.add("open");document.body.classList.add("opened");
-  setTimeout(function(){document.body.classList.remove("locked")},reduce?50:1500);setTimeout(function(){cover.remove()},reduce?60:(T.coverImg?2500:1700));startAmbient();playMusic()}
+  setTimeout(function(){document.body.classList.remove("locked")},reduce?50:1500);setTimeout(function(){cover.remove()},reduce?60:(T.coverImg?2500:1700));startAmbient();playMusic();openCurtains()}
 cover.addEventListener("click",openCard);cover.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();openCard()}});
 
 /* ---- music: starts with the tap that opens the card, with a button to turn it off ---- */

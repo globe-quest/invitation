@@ -11,7 +11,7 @@ window.WEDDING = {
 
   // WhatsApp number that receives RSVPs, with country code and no + or spaces,
   // e.g. "923001234567". Leave "" and the guest picks the contact themselves.
-  rsvpWhatsApp: "",
+  rsvpWhatsApp: "923117864822",                         // 0311 7864822, written with Pakistan code 92 and no leading 0
 
   // Used by every card unless an event below has its own "venue".
   venue: {
@@ -28,7 +28,10 @@ window.WEDDING = {
       program: [["7:00 PM", "Guests arrive"], ["8:00 PM", "Dholki and dance"], ["9:30 PM", "Dinner"]],   // PLACEHOLDER
       sealUrdu: "مہندی",                                 // word inside the gold seal on the cover
       signatureUrdu: "نِگہت کا کنبہ",                     // closing line at the bottom of the card
-      music: "audio/mehndi-90s.wav",                    // replace this file with your own track if you like
+      coverTitle: false,                                // start screen: no title
+      coverNames: false,                                // start screen: no names
+      heroDate: false,                                  // date only inside the scratch heart
+      music: "audio/mehndi-90s.mp3",
       themeName: "Straight out of the 90s",
       dress: "Bright colours, gota, parandas and anything your mother wore to a mehndi in 1995."
     },
@@ -38,25 +41,36 @@ window.WEDDING = {
       invite: "Join us for a night of qawwali under the lights.",
       program: [["7:00 PM", "Guests arrive"], ["8:00 PM", "Qawwali begins"], ["10:00 PM", "Dinner"]],    // PLACEHOLDER
       signatureUrdu: "نِگہت کا کنبہ",
-      music: "audio/qawwali.wav",
+      coverTitle: false,                                // start screen: no title
+      coverNames: false,                                // start screen: no names
+      heroDate: false,                                  // date only inside the scratch heart
+      music: "audio/qawwali.mp3",
       themeName: "All black",
       dress: "Black, with a little gold if you like."
     },
     "haldi": {
       title: "Haldi", urdu: "ہلدی",
       date: "2027-01-20", time: "19:00",                // PLACEHOLDER time
-      invite: "Come shower the couple with haldi, flowers and plenty of love.",
+      invite: "Come shower شہریار with haldi, flowers and lots of love.",
       program: [["7:00 PM", "Guests arrive"], ["7:30 PM", "Haldi ceremony"], ["9:00 PM", "Dinner"]],     // PLACEHOLDER
-      music: "audio/haldi.wav",
-      themeName: "Bright yellow",
-      dress: "Ghararas and frocks in bright yellow."
+      coverTitle: false,                                // no "Haldi" word on the photo start screen
+      heroDate: false,
+      heroNames: "groom",                               // opening screen shows only the groom's name                                  // date stays hidden until the heart is scratched
+      photo: { src: "img/haldi-groom.jpg", caption: "Shehryar Ahmed" },   // framed photo after the invitation line
+      music: "audio/haldi.mp3",
+      themeName: "جو دل چاہے پہنیں",
+      dress: "کچھ بھی پہن لیں، آپ شہریار سے پیارے نہیں لگ سکتے!"
     },
     "mehndi-lagai": {
       title: "Mehndi Lagai", urdu: "مہندی لگائی",
       date: "2027-01-21", time: "19:00",                // PLACEHOLDER time
       invite: "An evening of henna, bangles and songs before the big days.",
       program: [["7:00 PM", "Guests arrive"], ["7:30 PM", "Henna for everyone"], ["9:30 PM", "Dinner"]], // PLACEHOLDER
-      music: "audio/mehndi-lagai.wav",
+      coverTitle: false,                                // start screen: no title
+      coverNames: false,                                // start screen: no names
+      heroDate: false,
+      heroNames: "groom",                               // opening screen shows only the groom's name                                  // date only inside the scratch heart
+      music: "audio/mehndi-lagai.mp3",
       themeName: "Natural colours",
       dress: "Soft, earthy shades: rose, rust, sage and henna brown."
     },
