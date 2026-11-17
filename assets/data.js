@@ -82,6 +82,21 @@ window.WEDDING = {
       themeName: "Full bright colours",
       dress: "The brighter the better. Marigold, pink, purple, green, all at once."
     },
+    "sehra-bandi": {
+      title: "Sehra Bandi", titleUr: "تقریبِ سہرا بندی",   // hero title shown in Urdu
+      urdu: "",
+      groomName: "شہریار لالا",                           // name shown on the opening screen
+      date: "2027-01-23", time: "11:00",
+      coverTitle: false, coverNames: false, heroDate: false, heroNames: "groom",
+      photoFirst: true,                                  // groom photo comes right after the opening screen
+      photo: { src: "img/sehra-bandi-groom.jpg", caption: "" },
+      kicker: false,                                     // no "Together with their families" line
+      invite: "Please join us as the sehra is tied on our Beloved Shehryar Lala, with prayers and love, on the Barat.",
+      program: [["11:00 AM", "Guests arrive"], ["11:30 AM", "Sehra Bandi"], ["12:30 PM", "Lunch"]],   // PLACEHOLDER
+      music: "audio/sehra-bandi.mp3",
+      themeName: "Ivory and gold",
+      dress: "Whites, ivories and soft golds."
+    },
     "barat": {
       title: "Barat", urdu: "بارات",
       date: "2027-01-23", time: "19:00",                // PLACEHOLDER time

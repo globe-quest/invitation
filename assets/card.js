@@ -19,6 +19,7 @@ if(T.display==="Rozha")document.documentElement.classList.add("rz");
 if(T.night)document.documentElement.classList.add("nt");
 if(T.paperArt)document.documentElement.classList.add("pp");
 if(T.qawwaliArt)document.documentElement.classList.add("qw","rz");
+if(T.ivoryArt)document.documentElement.classList.add("iv","rz");
 ["velvet","drape","swag"].forEach(function(c){if(T[c])document.documentElement.classList.add(c)});
 st.setProperty("--heart","url(\"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 96"><path d="M50 92C20 68 4 49 4 30C4 15 16 6 28 6C38 6 46 12 50 21C54 12 62 6 72 6C84 6 96 15 96 30C96 49 80 68 50 92Z"/></svg>')+"\")");
 
@@ -94,11 +95,11 @@ $("#app").innerHTML=
      '<div class="seal">'+sealSVG()+'<div class="mono">'+esc(g1[0])+'<i>&amp;</i>'+esc(b1[0])+'</div></div>'+
      '<div class="cbot"><div class="ev">'+esc(E.title)+'</div><span class="tap">Tap to open</span></div></div>')+
  '<header class="hero'+(T.deco==="arches"?" arch":"")+(T.heroImg?" art":"")+'"'+(T.heroImg?' style="--heroimg:url('+heroUrl+')"':'')+'>'+hangHTML()+decoHTML()+(T.curtain?'<svg class="vc" id="vc" aria-hidden="true"></svg>':'<div class="cur l"></div><div class="cur r"></div>'+(T.swag?swagSVG():'<div class="val"></div>'))+
-   '<div class="in"><div class="kick">Together with their families</div><h1 class="evt">'+esc(E.title)+'</h1><div class="ur'+(T.velvet||T.goldUrdu?" gold":"")+'" lang="ur">'+esc(E.urdu)+'</div>'+orn+
-   '<p class="nm"><span>'+esc(W.groom)+'</span></p>'+(E.heroNames==="groom"?'':'<div class="amp">&amp;</div><p class="nm"><span>'+esc(W.bride)+'</span></p>')+
+   '<div class="in">'+(E.kicker===false?'':'<div class="kick">Together with their families</div>')+'<h1 class="evt'+(E.titleUr?' urt" lang="ur" dir="rtl':'')+'">'+esc(E.titleUr||E.title)+'</h1>'+(E.urdu?'<div class="ur'+(T.velvet||T.goldUrdu?" gold":"")+'" lang="ur">'+esc(E.urdu)+'</div>':'')+''+orn+
+   '<p class="nm'+(E.groomName?' urn" lang="ur" dir="rtl':'')+'"><span>'+esc(E.groomName||W.groom)+'</span></p>'+(E.heroNames==="groom"?'':'<div class="amp">&amp;</div><p class="nm"><span>'+esc(W.bride)+'</span></p>')+
    (E.heroDate===false?'':'<div class="dline">'+dp[2]+" "+MON[dp[1]-1]+" "+dp[0]+'</div>')+'</div><div class="cue">Scroll</div></header>'+
- '<section class="s rv">'+leadP(E.invite)+''+orn+'</section>'+
- (E.photo?'<section class="s rv ph"><figure class="arch"><div class="fr"><img src="'+photoUrl+'" alt="'+esc(E.photo.caption||"")+'" loading="lazy"></div>'+(E.photo.caption?'<figcaption>'+esc(E.photo.caption)+'</figcaption>':'')+'</figure></section>':'')+
+ (E.photo&&E.photoFirst?'<section class="s rv ph"><figure class="arch"><div class="fr"><img src="'+photoUrl+'" alt="'+esc(E.photo.caption||"")+'" loading="lazy"></div>'+(E.photo.caption?'<figcaption>'+esc(E.photo.caption)+'</figcaption>':'')+'</figure></section>':'')+'<section class="s rv">'+leadP(E.invite)+''+orn+'</section>'+
+ (E.photo&&!E.photoFirst?'<section class="s rv ph"><figure class="arch"><div class="fr"><img src="'+photoUrl+'" alt="'+esc(E.photo.caption||"")+'" loading="lazy"></div>'+(E.photo.caption?'<figcaption>'+esc(E.photo.caption)+'</figcaption>':'')+'</figure></section>':'')+
  '<section class="s rv" id="date"><h2>Scratch to reveal</h2><p class="sub">Rub the '+(T.scratch==="heart"?"heart":"circle")+' to see the date.</p>'+
    '<div class="scr'+(T.scratch==="heart"?" heart":"")+'" id="scr"><div class="under"><span class="m">'+MON[dp[1]-1]+'</span><span class="d">'+dp[2]+'</span><span class="m">'+wd+' '+dp[0]+'</span><span class="t">'+t12+'</span></div><canvas aria-label="Scratch area"></canvas></div>'+
    '<button class="link" id="skip">or tap here to reveal</button>'+
